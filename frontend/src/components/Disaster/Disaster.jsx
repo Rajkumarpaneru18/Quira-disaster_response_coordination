@@ -6,39 +6,52 @@ import Sidebar from "../Sidebar/SideBar";
 import Header from "../Header./Header";
 
 const initialDisasters = [
-  { id: 1, name: "Flood in Saptari tarai", imageUrl: image1 },
-  { id: 2, name: "Hurricane in Florida", imageUrl: image2 },
-  { id: 3, name: "Earthquake in Los Angeles", imageUrl: image3 },
+  {
+    id: 1,
+    name: "Flood in Saptari tarai",
+    imageUrl: image1,
+    detailsUrl: "https://quira.sh/quests/creator/submissions?questId=13",
+  },
+  {
+    id: 2,
+    name: "Flood in Kathmandu",
+    imageUrl: image2,
+    detailsUrl: "/disasters/2",
+  },
+  {
+    id: 3,
+    name: "Landslide in Sindhupalchowk",
+    imageUrl: image3,
+    detailsUrl: "/disasters/3",
+  },
 ];
 
 function Disasters() {
   const [disasters, setDisasters] = useState(initialDisasters);
   const [newDisasterName, setNewDisasterName] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
+  const [newDetailsUrl, setNewDetailsUrl] = useState("");
   const [showAddForm, setShowAddForm] = useState(false); // State to toggle showing the add form
 
   const handleAddDisaster = () => {
-    if (newDisasterName && newImageUrl) {
+    if (newDisasterName && newImageUrl && newDetailsUrl) {
       const newDisaster = {
         id: disasters.length + 1,
         name: newDisasterName,
         imageUrl: newImageUrl,
+        detailsUrl: newDetailsUrl,
       };
 
       setDisasters([...disasters, newDisaster]);
       setNewDisasterName("");
       setNewImageUrl("");
+      setNewDetailsUrl("");
       setShowAddForm(false); // After adding, hide the add form
     } else {
       alert(
-        "Please provide both a name and an image URL for the new disaster."
+        "Please provide a name, an image URL, and a details URL for the new disaster."
       );
     }
-  };
-
-  const handleDeleteDisaster = (id) => {
-    const updatedDisasters = disasters.filter((disaster) => disaster.id !== id);
-    setDisasters(updatedDisasters);
   };
 
   return (
@@ -71,6 +84,13 @@ function Disasters() {
                   value={newImageUrl}
                   onChange={(e) => setNewImageUrl(e.target.value)}
                 />
+                <input
+                  type="text"
+                  placeholder="Enter Details URL"
+                  className="border border-gray-300 p-2 mr-2 rounded-xl"
+                  value={newDetailsUrl}
+                  onChange={(e) => setNewDetailsUrl(e.target.value)}
+                />
                 <div>
                   <button
                     className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl"
@@ -86,10 +106,9 @@ function Disasters() {
         <div className="flex">
           <Sidebar />
           <h2 className="text-xl font-bold mb-4 my-8 mx-4 ">Disasters</h2>
-          {/* Toggle visibility based on showAddForm */}
           <div className="absolute mx-96 grid grid-cols-3 gap-4 my-16">
             {disasters.map((disaster) => (
-              <div key={disaster.id} className=" rounded p-4 ">
+              <div key={disaster.id} className="rounded p-4">
                 <img
                   src={disaster.imageUrl}
                   alt={disaster.name}
@@ -97,12 +116,12 @@ function Disasters() {
                 />
                 <h3 className="text-lg font-light">{disaster.name}</h3>
                 <div className="-my-4">
-                  <button
-                    className="bg-red-300 hover:bg-red-600 text-white font-bold w-16 h-8 mx-64 rounded-xl"
-                    onClick={() => handleDeleteDisaster(disaster.id)}
+                  <a
+                    href={disaster.detailsUrl}
+                    className="bg-red-300 hover:bg-red-600 text-white font-bold w-20 h-8 mx-60  rounded-xl flex items-center justify-center "
                   >
-                    Delete
-                  </button>
+                    See More
+                  </a>
                 </div>
               </div>
             ))}

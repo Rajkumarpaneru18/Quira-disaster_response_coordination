@@ -5,8 +5,8 @@ import image3 from "../../assets/landslide.jpeg";
 
 const initialDisasters = [
   { id: 1, name: "Flood in Saptari tarai", imageUrl: image1 },
-  { id: 2, name: "Hurricane in Florida", imageUrl: image2 },
-  { id: 3, name: "Earthquake in Los Angeles", imageUrl: image3 },
+  { id: 2, name: "Flood in Kathmandu", imageUrl: image2 },
+  { id: 3, name: "Landslide In SindhuPalchowk", imageUrl: image3 },
 ];
 
 function DisastersOverview() {
