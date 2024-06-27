@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import img1 from "../../assets/nepalpolice.jpg";
 import img2 from "../../assets/medical staff.jpeg";
 import img3 from "../../assets/volunteer.png";
@@ -16,6 +16,15 @@ function Responders() {
   const [newResponderName, setNewResponderName] = useState("");
   const [newImageUrl, setNewImageUrl] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isCoordinator, setIsCoordinator] = useState(false);
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    console.log(role);
+    if (role === "editor") {
+      setIsCoordinator(true);
+    }
+  }, []);
 
   const handleAddResponder = () => {
     if (newResponderName && newImageUrl) {
@@ -58,39 +67,47 @@ function Responders() {
             </div>
           </div>
           <div className="absolute right-0 -my-44 mb-6 mr-6 ">
-            {!showAddForm && (
-              <button
-                className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl"
-                onClick={() => setShowAddForm(true)}
-              >
-                Add New Responder
-              </button>
-            )}
-            {showAddForm && (
-              <div className="flex items-center mb-2">
-                <input
-                  type="text"
-                  placeholder="Enter Responder Name"
-                  className="border border-gray-300 p-2 mr-2 rounded-xl"
-                  value={newResponderName}
-                  onChange={(e) => setNewResponderName(e.target.value)}
-                />
-                <input
-                  type="text"
-                  placeholder="Enter Image URL"
-                  className="border border-gray-300 p-2 mr-2 rounded-xl"
-                  value={newImageUrl}
-                  onChange={(e) => setNewImageUrl(e.target.value)}
-                />
-                <div>
+            {isCoordinator ? (
+              <>
+                {!showAddForm && (
                   <button
                     className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl"
-                    onClick={handleAddResponder}
+                    onClick={() => setShowAddForm(true)}
                   >
                     Add New Responder
                   </button>
-                </div>
-              </div>
+                )}
+                {showAddForm && (
+                  <div className="flex items-center mb-2">
+                    <input
+                      type="text"
+                      placeholder="Enter Responder Name"
+                      className="border border-gray-300 p-2 mr-2 rounded-xl"
+                      value={newResponderName}
+                      onChange={(e) => setNewResponderName(e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Enter Image URL"
+                      className="border border-gray-300 p-2 mr-2 rounded-xl"
+                      value={newImageUrl}
+                      onChange={(e) => setNewImageUrl(e.target.value)}
+                    />
+                    <div>
+                      <button
+                        className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl"
+                        onClick={handleAddResponder}
+                      >
+                        Add New Responder
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <button className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl">
+                add No permission
+              </button>
             )}
           </div>
           <div className="grid grid-cols-3 gap-4">

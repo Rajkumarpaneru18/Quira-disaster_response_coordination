@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LogIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("http://localhost:3001/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,9 +25,10 @@ function LogIn() {
       const data = await response.json();
       // Store token in localStorage or context/state for future authenticated requests
       localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.role);
 
       // Redirect to main page or handle success
-      // Example: history.push('/mainpage');
+      navigate("/mainpage");
     } catch (error) {
       console.error("Login error:", error);
       // Handle error (e.g., show error message)
@@ -64,14 +66,12 @@ function LogIn() {
               className="w-full px-4 py-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
             />
           </div>
-          <Link to="/mainpage">
-            <button
-              type="submit"
-              className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md font-bold my-7"
-            >
-              Log in
-            </button>
-          </Link>
+          <button
+            type="submit"
+            className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md font-bold my-7"
+          >
+            Log in
+          </button>
         </form>
         <div className="text-right">
           <a href="#" className="text-red-500 hover:underline text-sm">

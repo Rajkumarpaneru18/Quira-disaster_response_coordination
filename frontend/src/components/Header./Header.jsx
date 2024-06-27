@@ -1,23 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/logo.png"; // Assuming you have a logo image in your assets folder
+import profilePhoto from "../../assets/flood.jpeg"; // Assuming you have a default profile photo in your assets folder
 
 function Header() {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const user = localStorage.getItem("username");
+    console.log(user);
+    if (user) {
+      setUsername(user);
+    }
+  }, []);
+
   return (
     <header className="flex justify-between items-center bg-gray-300 px-4 py-2 shadow-md h-32">
       <div className="flex items-center">
-        <img src={logo} alt="Logo" className="mx-12 w-48 rounded-full mr-2" />{" "}
-        {/* Adjust size as needed */}
-        <h1 className="text-lg font-bold"></h1>
+        <img src={logo} alt="Logo" className="mx-12 w-48 rounded-full mr-2" />
       </div>
-      {/* <nav className="flex space-x-4">
-        <a href="#" className="text-gray-700 hover:text-gray-900">
-          Dashboard
-        </a>
-        <a href="#" className="text-gray-700 hover:text-gray-900">
-          Reports
-        </a>
-        <div className="w-8 h-8 bg-gray-800 rounded-full"></div>
-      </nav> */}
+      <div className="flex items-center">
+        {username && (
+          <>
+            <img
+              src={profilePhoto}
+              alt="Profile"
+              className="w-12 h-12 rounded-full mr-4"
+            />
+            <span className="text-lg font-bold text-red-600">{username}</span>
+          </>
+        )}
+      </div>
     </header>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../Sidebar/SideBar";
 import Header from "../Header./Header";
 
@@ -36,6 +36,14 @@ function Tasks() {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isEditor, setIsEditor] = useState(false);
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "editor") {
+      setIsEditor(true);
+    }
+  }, []);
 
   const handleAddTask = () => {
     if (newTaskTitle && newTaskDescription) {
@@ -73,47 +81,55 @@ function Tasks() {
             ))}
           </div>
           <div className="absolute -right-4 mb-6 mr-6 -my-44">
-            {!showAddForm && (
-              <button
-                className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl"
-                onClick={() => setShowAddForm(true)}
-              >
-                Add New Task
-              </button>
-            )}
-            {showAddForm && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                <div className="bg-white p-6 rounded-xl shadow-lg w-1/3">
-                  <h2 className="text-xl font-bold mb-4">Add New Task</h2>
-                  <input
-                    type="text"
-                    placeholder="Enter Task Title"
-                    className="border border-gray-300 p-2 mb-4 w-full rounded-xl"
-                    value={newTaskTitle}
-                    onChange={(e) => setNewTaskTitle(e.target.value)}
-                  />
-                  <textarea
-                    placeholder="Enter Task Description"
-                    className="border border-gray-300 p-2 mb-4 w-full rounded-xl"
-                    value={newTaskDescription}
-                    onChange={(e) => setNewTaskDescription(e.target.value)}
-                  ></textarea>
-                  <div className="flex justify-end">
-                    <button
-                      className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl mr-2"
-                      onClick={handleAddTask}
-                    >
-                      Add Task
-                    </button>
-                    <button
-                      className="bg-gray-300 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-2xl"
-                      onClick={() => setShowAddForm(false)}
-                    >
-                      Cancel
-                    </button>
+            {isEditor ? (
+              <>
+                {!showAddForm && (
+                  <button
+                    className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl"
+                    onClick={() => setShowAddForm(true)}
+                  >
+                    Add New Task
+                  </button>
+                )}
+                {showAddForm && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-lg w-1/3">
+                      <h2 className="text-xl font-bold mb-4">Add New Task</h2>
+                      <input
+                        type="text"
+                        placeholder="Enter Task Title"
+                        className="border border-gray-300 p-2 mb-4 w-full rounded-xl"
+                        value={newTaskTitle}
+                        onChange={(e) => setNewTaskTitle(e.target.value)}
+                      />
+                      <textarea
+                        placeholder="Enter Task Description"
+                        className="border border-gray-300 p-2 mb-4 w-full rounded-xl"
+                        value={newTaskDescription}
+                        onChange={(e) => setNewTaskDescription(e.target.value)}
+                      ></textarea>
+                      <div className="flex justify-end">
+                        <button
+                          className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl mr-2"
+                          onClick={handleAddTask}
+                        >
+                          Add Task
+                        </button>
+                        <button
+                          className="bg-gray-300 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-2xl"
+                          onClick={() => setShowAddForm(false)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                )}
+              </>
+            ) : (
+              <button className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl">
+                No permission
+              </button>
             )}
           </div>
           <div className="mt-8 w-1/2">

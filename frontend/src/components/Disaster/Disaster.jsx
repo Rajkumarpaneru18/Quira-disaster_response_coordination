@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import image1 from "../../assets/flood.jpeg";
 import image2 from "../../assets/flood2.jpeg";
 import image3 from "../../assets/landslide.jpeg";
@@ -32,6 +32,25 @@ function Disasters() {
   const [newImageUrl, setNewImageUrl] = useState("");
   const [newDetailsUrl, setNewDetailsUrl] = useState("");
   const [showAddForm, setShowAddForm] = useState(false); // State to toggle showing the add form
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showNoPermissionMessage, setShowNoPermissionMessage] = useState(false);
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "admin") {
+      setIsAdmin(true);
+    }
+  }, []);
+
+  const handleAddDisasterClick = () => {
+    if (isAdmin) {
+      setShowAddForm(true);
+      setShowNoPermissionMessage(false);
+    } else {
+      setShowNoPermissionMessage(true);
+      setShowAddForm(false);
+    }
+  };
 
   const handleAddDisaster = () => {
     if (newDisasterName && newImageUrl && newDetailsUrl) {
@@ -63,7 +82,7 @@ function Disasters() {
             {!showAddForm && (
               <button
                 className="bg-red-300 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl"
-                onClick={() => setShowAddForm(true)}
+                onClick={handleAddDisasterClick}
               >
                 Add New Disaster
               </button>
@@ -103,6 +122,13 @@ function Disasters() {
             )}
           </div>
         </div>
+        {showNoPermissionMessage && (
+          <div className="absolute right-0 h-20 w-42 my-20">
+            <p className="text-red-600 font-bold text-xl">
+              No permission to add disasters
+            </p>
+          </div>
+        )}
         <div className="flex">
           <Sidebar />
           <h2 className="text-xl font-bold mb-4 my-8 mx-4 ">Disasters</h2>
@@ -118,7 +144,7 @@ function Disasters() {
                 <div className="-my-4">
                   <a
                     href={disaster.detailsUrl}
-                    className="bg-red-300 hover:bg-red-600 text-white font-bold w-20 h-8 mx-60  rounded-xl flex items-center justify-center "
+                    className="bg-red-300 hover:bg-red-600 text-white font-bold w-20 h-8 mx-60 rounded-xl flex items-center justify-center"
                   >
                     See More
                   </a>
